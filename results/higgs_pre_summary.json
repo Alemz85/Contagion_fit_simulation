@@ -1,0 +1,367 @@
+{
+  "cutoff_unix": 1341360000,
+  "full_higgs_summary": {
+    "n": 13199,
+    "median": 2.0,
+    "mean": 19.432608530949313,
+    "max": 223833
+  },
+  "pre_higgs_summary": {
+    "n": 2225,
+    "median": 2.0,
+    "mean": 12.438202247191011,
+    "max": 21422
+  },
+  "fits": {
+    "ba": {
+      "platform": "higgs_pre",
+      "label": "science_news",
+      "winner": "complex",
+      "margin": 0.05403370786516859,
+      "ic": {
+        "model_name": "SimpleContagion",
+        "best_params": {
+          "p": 0.2
+        },
+        "best_distance": 0.4348539325842697,
+        "table": [
+          {
+            "params": {
+              "p": 0.001
+            },
+            "distance": 0.994
+          },
+          {
+            "params": {
+              "p": 0.003
+            },
+            "distance": 0.987
+          },
+          {
+            "params": {
+              "p": 0.01
+            },
+            "distance": 0.942
+          },
+          {
+            "params": {
+              "p": 0.03
+            },
+            "distance": 0.842
+          },
+          {
+            "params": {
+              "p": 0.05
+            },
+            "distance": 0.776
+          },
+          {
+            "params": {
+              "p": 0.1
+            },
+            "distance": 0.609
+          },
+          {
+            "params": {
+              "p": 0.15
+            },
+            "distance": 0.469
+          },
+          {
+            "params": {
+              "p": 0.2
+            },
+            "distance": 0.4348539325842697
+          },
+          {
+            "params": {
+              "p": 0.3
+            },
+            "distance": 0.666
+          },
+          {
+            "params": {
+              "p": 0.5
+            },
+            "distance": 0.93
+          },
+          {
+            "params": {
+              "p": 0.7
+            },
+            "distance": 0.99
+          }
+        ]
+      },
+      "threshold": {
+        "model_name": "ComplexContagion",
+        "best_params": {
+          "phi": 0.15,
+          "p": 0.5
+        },
+        "best_distance": 0.3808202247191011,
+        "table": [
+          {
+            "params": {
+              "phi": 0.05,
+              "p": 0.5
+            },
+            "distance": 0.849
+          },
+          {
+            "params": {
+              "phi": 0.05,
+              "p": 1.0
+            },
+            "distance": 0.99
+          },
+          {
+            "params": {
+              "phi": 0.1,
+              "p": 0.5
+            },
+            "distance": 0.708
+          },
+          {
+            "params": {
+              "phi": 0.1,
+              "p": 1.0
+            },
+            "distance": 0.957
+          },
+          {
+            "params": {
+              "phi": 0.15,
+              "p": 0.5
+            },
+            "distance": 0.3808202247191011
+          },
+          {
+            "params": {
+              "phi": 0.15,
+              "p": 1.0
+            },
+            "distance": 0.6855842696629213
+          },
+          {
+            "params": {
+              "phi": 0.2,
+              "p": 0.5
+            },
+            "distance": 0.433
+          },
+          {
+            "params": {
+              "phi": 0.2,
+              "p": 1.0
+            },
+            "distance": 0.5025505617977528
+          },
+          {
+            "params": {
+              "phi": 0.3,
+              "p": 0.5
+            },
+            "distance": 0.661
+          },
+          {
+            "params": {
+              "phi": 0.3,
+              "p": 1.0
+            },
+            "distance": 0.504
+          },
+          {
+            "params": {
+              "phi": 0.4,
+              "p": 0.5
+            },
+            "distance": 1.0
+          },
+          {
+            "params": {
+              "phi": 0.4,
+              "p": 1.0
+            },
+            "distance": 1.0
+          }
+        ]
+      }
+    },
+    "ws": {
+      "platform": "higgs_pre",
+      "label": "science_news",
+      "winner": "simple",
+      "margin": 0.21999999999999997,
+      "ic": {
+        "model_name": "SimpleContagion",
+        "best_params": {
+          "p": 0.15
+        },
+        "best_distance": 0.36,
+        "table": [
+          {
+            "params": {
+              "p": 0.001
+            },
+            "distance": 0.995
+          },
+          {
+            "params": {
+              "p": 0.003
+            },
+            "distance": 0.985
+          },
+          {
+            "params": {
+              "p": 0.01
+            },
+            "distance": 0.946
+          },
+          {
+            "params": {
+              "p": 0.03
+            },
+            "distance": 0.826
+          },
+          {
+            "params": {
+              "p": 0.05
+            },
+            "distance": 0.757
+          },
+          {
+            "params": {
+              "p": 0.1
+            },
+            "distance": 0.532
+          },
+          {
+            "params": {
+              "p": 0.15
+            },
+            "distance": 0.36
+          },
+          {
+            "params": {
+              "p": 0.2
+            },
+            "distance": 0.40292134831460674
+          },
+          {
+            "params": {
+              "p": 0.3
+            },
+            "distance": 0.6688202247191011
+          },
+          {
+            "params": {
+              "p": 0.5
+            },
+            "distance": 0.973
+          },
+          {
+            "params": {
+              "p": 0.7
+            },
+            "distance": 1.0
+          }
+        ]
+      },
+      "threshold": {
+        "model_name": "ComplexContagion",
+        "best_params": {
+          "phi": 0.2,
+          "p": 0.5
+        },
+        "best_distance": 0.58,
+        "table": [
+          {
+            "params": {
+              "phi": 0.05,
+              "p": 0.5
+            },
+            "distance": 0.97
+          },
+          {
+            "params": {
+              "phi": 0.05,
+              "p": 1.0
+            },
+            "distance": 1.0
+          },
+          {
+            "params": {
+              "phi": 0.1,
+              "p": 0.5
+            },
+            "distance": 0.979
+          },
+          {
+            "params": {
+              "phi": 0.1,
+              "p": 1.0
+            },
+            "distance": 1.0
+          },
+          {
+            "params": {
+              "phi": 0.15,
+              "p": 0.5
+            },
+            "distance": 0.92
+          },
+          {
+            "params": {
+              "phi": 0.15,
+              "p": 1.0
+            },
+            "distance": 1.0
+          },
+          {
+            "params": {
+              "phi": 0.2,
+              "p": 0.5
+            },
+            "distance": 0.58
+          },
+          {
+            "params": {
+              "phi": 0.2,
+              "p": 1.0
+            },
+            "distance": 0.645
+          },
+          {
+            "params": {
+              "phi": 0.3,
+              "p": 0.5
+            },
+            "distance": 1.0
+          },
+          {
+            "params": {
+              "phi": 0.3,
+              "p": 1.0
+            },
+            "distance": 0.998
+          },
+          {
+            "params": {
+              "phi": 0.4,
+              "p": 0.5
+            },
+            "distance": 1.0
+          },
+          {
+            "params": {
+              "phi": 0.4,
+              "p": 1.0
+            },
+            "distance": 1.0
+          }
+        ]
+      }
+    }
+  }
+}

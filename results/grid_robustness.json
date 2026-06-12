@@ -1,0 +1,513 @@
+{
+  "extended_ic_p_grid": [
+    0.001,
+    0.003,
+    0.01,
+    0.03,
+    0.05,
+    0.1,
+    0.15,
+    0.2,
+    0.3,
+    0.5,
+    0.7
+  ],
+  "rows": [
+    {
+      "substrate": "ba",
+      "dataset": "higgs",
+      "ic_best_p": 0.2,
+      "ic_optimum_interior": true,
+      "ic_best_distance": 0.44081604667020224,
+      "threshold_best_params": {
+        "phi": 0.15,
+        "p": 0.5
+      },
+      "threshold_best_distance": 0.4112540343965452,
+      "winner": "complex",
+      "margin": 0.029562012273657068,
+      "original_winner": "tie",
+      "winner_changed": true,
+      "ic_table": [
+        {
+          "p": 0.001,
+          "distance": 0.994
+        },
+        {
+          "p": 0.003,
+          "distance": 0.987
+        },
+        {
+          "p": 0.01,
+          "distance": 0.942
+        },
+        {
+          "p": 0.03,
+          "distance": 0.842
+        },
+        {
+          "p": 0.05,
+          "distance": 0.776
+        },
+        {
+          "p": 0.1,
+          "distance": 0.609
+        },
+        {
+          "p": 0.15,
+          "distance": 0.469
+        },
+        {
+          "p": 0.2,
+          "distance": 0.44081604667020224
+        },
+        {
+          "p": 0.3,
+          "distance": 0.6659242366845972
+        },
+        {
+          "p": 0.5,
+          "distance": 0.9299242366845972
+        },
+        {
+          "p": 0.7,
+          "distance": 0.9899242366845973
+        }
+      ]
+    },
+    {
+      "substrate": "ba",
+      "dataset": "twitter15",
+      "ic_best_p": 0.2,
+      "ic_optimum_interior": true,
+      "ic_best_distance": 0.435,
+      "threshold_best_params": {
+        "phi": 0.2,
+        "p": 1.0
+      },
+      "threshold_best_distance": 0.16441437206178644,
+      "winner": "complex",
+      "margin": 0.27058562793821356,
+      "original_winner": "complex",
+      "winner_changed": false,
+      "ic_table": [
+        {
+          "p": 0.001,
+          "distance": 0.8972907991940899
+        },
+        {
+          "p": 0.003,
+          "distance": 0.89029079919409
+        },
+        {
+          "p": 0.01,
+          "distance": 0.84529079919409
+        },
+        {
+          "p": 0.03,
+          "distance": 0.7754600402955003
+        },
+        {
+          "p": 0.05,
+          "distance": 0.7344600402955004
+        },
+        {
+          "p": 0.1,
+          "distance": 0.5707031564808597
+        },
+        {
+          "p": 0.15,
+          "distance": 0.43546004029550034
+        },
+        {
+          "p": 0.2,
+          "distance": 0.435
+        },
+        {
+          "p": 0.3,
+          "distance": 0.666
+        },
+        {
+          "p": 0.5,
+          "distance": 0.93
+        },
+        {
+          "p": 0.7,
+          "distance": 0.99
+        }
+      ]
+    },
+    {
+      "substrate": "ba",
+      "dataset": "twitter16",
+      "ic_best_p": 0.2,
+      "ic_optimum_interior": true,
+      "ic_best_distance": 0.435,
+      "threshold_best_params": {
+        "phi": 0.2,
+        "p": 1.0
+      },
+      "threshold_best_distance": 0.23915422276621787,
+      "winner": "complex",
+      "margin": 0.19584577723378213,
+      "original_winner": "complex",
+      "winner_changed": false,
+      "ic_table": [
+        {
+          "p": 0.001,
+          "distance": 0.9279045287637699
+        },
+        {
+          "p": 0.003,
+          "distance": 0.9209045287637699
+        },
+        {
+          "p": 0.01,
+          "distance": 0.8759045287637699
+        },
+        {
+          "p": 0.03,
+          "distance": 0.8127050183598531
+        },
+        {
+          "p": 0.05,
+          "distance": 0.7717050183598532
+        },
+        {
+          "p": 0.1,
+          "distance": 0.6179694002447981
+        },
+        {
+          "p": 0.15,
+          "distance": 0.47496940024479806
+        },
+        {
+          "p": 0.2,
+          "distance": 0.435
+        },
+        {
+          "p": 0.3,
+          "distance": 0.666
+        },
+        {
+          "p": 0.5,
+          "distance": 0.93
+        },
+        {
+          "p": 0.7,
+          "distance": 0.99
+        }
+      ]
+    },
+    {
+      "substrate": "ba",
+      "dataset": "weibo",
+      "ic_best_p": 0.15,
+      "ic_optimum_interior": true,
+      "ic_best_distance": 0.3510720411663808,
+      "threshold_best_params": {
+        "phi": 0.2,
+        "p": 1.0
+      },
+      "threshold_best_distance": 0.12660205831903945,
+      "winner": "complex",
+      "margin": 0.22446998284734135,
+      "original_winner": "complex",
+      "winner_changed": false,
+      "ic_table": [
+        {
+          "p": 0.001,
+          "distance": 0.8376963979416809
+        },
+        {
+          "p": 0.003,
+          "distance": 0.8306963979416809
+        },
+        {
+          "p": 0.01,
+          "distance": 0.785696397941681
+        },
+        {
+          "p": 0.03,
+          "distance": 0.6910720411663808
+        },
+        {
+          "p": 0.05,
+          "distance": 0.6500720411663808
+        },
+        {
+          "p": 0.1,
+          "distance": 0.487253859348199
+        },
+        {
+          "p": 0.15,
+          "distance": 0.3510720411663808
+        },
+        {
+          "p": 0.2,
+          "distance": 0.435
+        },
+        {
+          "p": 0.3,
+          "distance": 0.666
+        },
+        {
+          "p": 0.5,
+          "distance": 0.93
+        },
+        {
+          "p": 0.7,
+          "distance": 0.99
+        }
+      ]
+    },
+    {
+      "substrate": "ws",
+      "dataset": "higgs",
+      "ic_best_p": 0.15,
+      "ic_optimum_interior": true,
+      "ic_best_distance": 0.36,
+      "threshold_best_params": {
+        "phi": 0.2,
+        "p": 0.5
+      },
+      "threshold_best_distance": 0.58,
+      "winner": "simple",
+      "margin": 0.21999999999999997,
+      "original_winner": "simple",
+      "winner_changed": false,
+      "ic_table": [
+        {
+          "p": 0.001,
+          "distance": 0.995
+        },
+        {
+          "p": 0.003,
+          "distance": 0.985
+        },
+        {
+          "p": 0.01,
+          "distance": 0.946
+        },
+        {
+          "p": 0.03,
+          "distance": 0.826
+        },
+        {
+          "p": 0.05,
+          "distance": 0.757
+        },
+        {
+          "p": 0.1,
+          "distance": 0.532
+        },
+        {
+          "p": 0.15,
+          "distance": 0.36
+        },
+        {
+          "p": 0.2,
+          "distance": 0.4503719978786272
+        },
+        {
+          "p": 0.3,
+          "distance": 0.7002540343965452
+        },
+        {
+          "p": 0.5,
+          "distance": 0.9729242366845973
+        },
+        {
+          "p": 0.7,
+          "distance": 0.9999242366845973
+        }
+      ]
+    },
+    {
+      "substrate": "ws",
+      "dataset": "twitter15",
+      "ic_best_p": 0.2,
+      "ic_optimum_interior": true,
+      "ic_best_distance": 0.30841437206178646,
+      "threshold_best_params": {
+        "phi": 0.2,
+        "p": 0.5
+      },
+      "threshold_best_distance": 0.48746004029550033,
+      "winner": "simple",
+      "margin": 0.17904566823371387,
+      "original_winner": "simple",
+      "winner_changed": false,
+      "ic_table": [
+        {
+          "p": 0.001,
+          "distance": 0.8982907991940899
+        },
+        {
+          "p": 0.003,
+          "distance": 0.88829079919409
+        },
+        {
+          "p": 0.01,
+          "distance": 0.84929079919409
+        },
+        {
+          "p": 0.03,
+          "distance": 0.7954600402955003
+        },
+        {
+          "p": 0.05,
+          "distance": 0.7544600402955003
+        },
+        {
+          "p": 0.1,
+          "distance": 0.6380053727333781
+        },
+        {
+          "p": 0.15,
+          "distance": 0.5134143720617864
+        },
+        {
+          "p": 0.2,
+          "distance": 0.30841437206178646
+        },
+        {
+          "p": 0.3,
+          "distance": 0.42
+        },
+        {
+          "p": 0.5,
+          "distance": 0.973
+        },
+        {
+          "p": 0.7,
+          "distance": 1.0
+        }
+      ]
+    },
+    {
+      "substrate": "ws",
+      "dataset": "twitter16",
+      "ic_best_p": 0.2,
+      "ic_optimum_interior": true,
+      "ic_best_distance": 0.38865850673194613,
+      "threshold_best_params": {
+        "phi": 0.2,
+        "p": 0.5
+      },
+      "threshold_best_distance": 0.5247050183598532,
+      "winner": "simple",
+      "margin": 0.13604651162790704,
+      "original_winner": "simple",
+      "winner_changed": false,
+      "ic_table": [
+        {
+          "p": 0.001,
+          "distance": 0.9289045287637699
+        },
+        {
+          "p": 0.003,
+          "distance": 0.9189045287637699
+        },
+        {
+          "p": 0.01,
+          "distance": 0.8799045287637699
+        },
+        {
+          "p": 0.03,
+          "distance": 0.8327050183598531
+        },
+        {
+          "p": 0.05,
+          "distance": 0.792969400244798
+        },
+        {
+          "p": 0.1,
+          "distance": 0.6896817625458996
+        },
+        {
+          "p": 0.15,
+          "distance": 0.5881542227662179
+        },
+        {
+          "p": 0.2,
+          "distance": 0.38865850673194613
+        },
+        {
+          "p": 0.3,
+          "distance": 0.4181040391676867
+        },
+        {
+          "p": 0.5,
+          "distance": 0.973
+        },
+        {
+          "p": 0.7,
+          "distance": 1.0
+        }
+      ]
+    },
+    {
+      "substrate": "ws",
+      "dataset": "weibo",
+      "ic_best_p": 0.2,
+      "ic_optimum_interior": true,
+      "ic_best_distance": 0.2954082332761578,
+      "threshold_best_params": {
+        "phi": 0.2,
+        "p": 0.5
+      },
+      "threshold_best_distance": 0.42369639794168096,
+      "winner": "simple",
+      "margin": 0.12828816466552317,
+      "original_winner": "simple",
+      "winner_changed": false,
+      "ic_table": [
+        {
+          "p": 0.001,
+          "distance": 0.8386963979416809
+        },
+        {
+          "p": 0.003,
+          "distance": 0.8286963979416809
+        },
+        {
+          "p": 0.01,
+          "distance": 0.789696397941681
+        },
+        {
+          "p": 0.03,
+          "distance": 0.7110720411663808
+        },
+        {
+          "p": 0.05,
+          "distance": 0.6700720411663807
+        },
+        {
+          "p": 0.1,
+          "distance": 0.5630874785591766
+        },
+        {
+          "p": 0.15,
+          "distance": 0.46245111492281304
+        },
+        {
+          "p": 0.2,
+          "distance": 0.2954082332761578
+        },
+        {
+          "p": 0.3,
+          "distance": 0.411
+        },
+        {
+          "p": 0.5,
+          "distance": 0.973
+        },
+        {
+          "p": 0.7,
+          "distance": 1.0
+        }
+      ]
+    }
+  ]
+}

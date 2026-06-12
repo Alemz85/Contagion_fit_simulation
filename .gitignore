@@ -1,0 +1,25 @@
+# Python bytecode / caches
+__pycache__/
+*.py[cod]
+*$py.class
+
+# Packaging / editable-install artifacts
+*.egg-info/
+src/*.egg-info/
+build/
+dist/
+.eggs/
+
+# Test / tooling caches
+.pytest_cache/
+.mypy_cache/
+.ruff_cache/
+
+# Scratch output (smoke runs)
+results_smoke*/
+
+# OS / editor
+.DS_Store
+Thumbs.db
+.idea/
+.vscode/
