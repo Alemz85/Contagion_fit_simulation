@@ -240,6 +240,40 @@ Below is a map of how advantageous a celebrity start is across all combinations 
 
 ![F5 flip boundary](results/F5_flip_boundary.png)
 
+### But wait — that was an unfair fight (Figure F8) ⚖️
+
+Comparing **1 celebrity vs 1 random person** is rigged: of course the celebrity
+wins. The real marketing question is: *with a fixed budget*, should you buy **one
+celebrity** or **a crowd of cheap ordinary accounts**? In real life a celebrity
+costs far more than a nobody — so we gave every strategy the **same budget** and
+made **fame expensive** (a hub costs about as much as ~12 ordinary accounts).
+
+```
+  budget = 15 coins
+  celebrity:  [HUB] costs 15  -> you can afford 1 seed
+  crowd:      [o][o][o][o][o][o][o][o] costs ~1 each -> you afford ~8 seeds
+```
+
+We let five strategies compete — celebrity (hub), two "smart targeting" methods,
+plain **random crowd**, and a **greedy planner** that uses the simulator to hunt
+for the best combination — and scored them on **reach per coin spent**.
+
+![F8 budget comparison — simple spread](results/F8_budget_cost_ic.png)
+
+> 🏆 **For simple spread (news-like), the crowd wins.** The one celebrity reaches
+> ~9 people for the whole budget; the same budget buys ~7–8 ordinary accounts that
+> reach ~14. Even better, the greedy planner — free to pick anyone — **chooses the
+> cheap crowd on its own**, confirming the celebrity is a waste of money here.
+> **This is exactly the famous "a distributed crowd beats one big influencer"
+> claim** (Watts & Dodds) — the thing the 1-vs-1 test in the chart above could
+> never show.
+
+For **complex spread** (where you need several friends before you join), it's the
+opposite: you need well-placed seeds to get the fire started, so targeting wins
+the raw reach while the random crowd sometimes fizzles. So the honest headline is:
+**a cheap crowd beats the celebrity for news-like spreading, but not for
+behaviours that need peer reinforcement.**
+
 ---
 
 ## 9. Just to be sure — is it a trick or a coincidence? 🔍

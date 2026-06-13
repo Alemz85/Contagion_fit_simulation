@@ -78,8 +78,10 @@ src/contagion_fit/
                   one shared, side-effect-free run() interface
   simulate.py     Monte-Carlo cascade-size sampling (serial + parallel, seeded)
   fit.py          KS distance on log10(size), grid search, model comparison
-  experiments.py  seeding strategy and hub/random flip-boundary sweeps
-  viz.py          figures F1-F5
+  experiments.py  seeding strategy, hub/random flip-boundary sweeps, and the
+                  budgeted seeding experiment (multi-seed + degree cost +
+                  greedy influence maximisation)
+  viz.py          figures F1-F5 and F8 (budget/cost)
   __main__.py     end-to-end pipeline
 ```
 
@@ -122,11 +124,15 @@ reach-per-cost. See FINDINGS_en.md §4.4.
 python -m pytest
 ```
 
-The suite encodes analytic edge cases (`p=0`, `p=1`, `phi=0`, `phi>1` on path,
-star, complete graphs), reproducibility under a fixed seed, the star-graph IC
-mean matching the analytic `1 + k*p`, and a **parameter-recovery test**:
-synthetic IC data is fed back through the grid search and the true `p` is
-recovered, demonstrating the fitting machinery is sound.
+The suite (31 tests, all passing) encodes analytic edge cases (`p=0`, `p=1`,
+`phi=0`, `phi>1` on path, star, complete graphs), reproducibility under a fixed
+seed, the star-graph IC mean matching the analytic `1 + k*p`, and a
+**parameter-recovery test**: synthetic IC data is fed back through the grid
+search and the true `p` is recovered, demonstrating the fitting machinery is
+sound. The budgeted-seeding extension adds 7 tests (`tests/test_experiments.py`):
+cost-model monotonicity, budget invariants, `alpha=0` reducing to a k-seed
+budget, the star analytic on the fixed-seed path, and greedy ≥ degree ≥ random
+expected reach on a disjoint-stars graph.
 
 ## Citations
 

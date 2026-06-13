@@ -33,6 +33,7 @@
 | F4 | シード戦略実験: ハブ起点 vs ランダム起点の期待リーチ（モデル別、エラーバー付き） | `viz.py` |
 | F5 | 反転境界ヒートマップ: (伝播確率p × 閾値φ)平面で「ハブ優位/分散優位」が反転する境界 | `viz.py` |
 | F6 | ワークフロー図（手描きでも可、ルーブリック「flowchart」要件） | 手動 |
+| F8 | 予算制約つきシード戦略: 固定予算・次数ベースコストでの戦略別リーチ／コストあたりリーチ（random/hub/pagerank/betweenness/greedy）。限界⑤への対処（拡張実装） | `viz.py` |
 
 ---
 
@@ -56,7 +57,7 @@ contagion-fit/
 │   ├── models.py              # SimpleContagion(IC), ComplexContagion(threshold) — 共通インターフェース
 │   ├── simulate.py            # モンテカルロエンジン（並列化、シード固定）
 │   ├── fit.py                 # グリッドサーチ + KS距離によるモデル選択
-│   ├── experiments.py         # シード戦略2×2実験、反転境界スイープ
+│   ├── experiments.py         # シード戦略2×2実験、反転境界スイープ、予算制約つきシード実験（複数シード＋コスト＋貪欲影響最大化）
 │   └── viz.py                 # F1〜F5の図生成
 ├── tests/
 │   ├── test_models.py
@@ -170,9 +171,19 @@ def seeding_experiment(G, model, n_runs=1000) -> dict
 
 def flip_boundary(G, p_range, phi_range, n_runs=300) -> np.ndarray
     # 各(p, phi)でハブ優位度 = mean(hub) - mean(random) を計算 → F5ヒートマップ
+
+def seed_budget_experiment(config, model, budget, cost_alpha, strategies) -> BudgetExperimentResult
+    # 固定予算・次数ベースコスト下で戦略別のリーチ／コストあたりリーチを比較 → F8
+    # 戦略: random / hub / pagerank / betweenness / greedy（KKT貪欲影響最大化）
 ```
 ここがWatts-Dodds vs インフルエンサー神話の直接対決。フィット済みパラメータ近傍で
 「自分のデータに最も近い世界では、どちらのシード戦略が正しいか」を答える。
+
+**拡張（限界⑤への対処）**: 上の単一シード hub vs random は「有名人1人 vs 一般人1人」で
+不公平なため、`seed_budget_experiment` で**固定予算＋次数ベースのコスト**（`cost(v)=1+α·deg/mean_deg`）
+を導入し、**コストあたりリーチ**で公平に競わせる。`greedy` はシミュレータで限界リーチを
+評価する Kempe-Kleinberg-Tardos 貪欲法。結論は FINDINGS_en.md §4.4 / F8 を参照（単純伝播では
+安価な分散シードがハブを上回る領域が存在）。乱数は全て凍結 `Config` 由来でワーカ数によらず再現可能。
 
 ### Phase 7 — `viz.py`
 matplotlib のみ（seaborn不要）。全図はSVGとPNG両方を `results/` に保存。
@@ -204,6 +215,10 @@ log-log CCDF が基本表現。図には必ずn_runs、ネットワーク種別�
 - `test_simulate.py`: seed固定で完全再現。スターグラフのIC期待サイズが解析値 1+k*p と一致（許容誤差内）。
 - `test_fit.py`: 自作データ（IC自身で生成）をグリッドサーチに食わせ、真のpが回収できる
   （**パラメータ回収テスト** — これが通れば手法の妥当性が示せる。プレゼンの強い1枚になる）。
+- `test_experiments.py`（拡張）: コストが次数で増加 / 予算超過しない / α=0でkシード予算に一致 /
+  固定シードのスター解析値一致 / 互いに素なスター上で greedy ≥ degree ≥ random。計7件。
+
+（全テスト件数: 基本24件＋拡張7件＝**31件、全パス**。）
 
 ---
 
