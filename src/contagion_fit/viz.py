@@ -256,7 +256,7 @@ def fig_budget_cost(
 
     fig.suptitle(
         f"F8 - Seed-budget comparison ({config.substrate.upper()} substrate, "
-        f"{result.model_label}, budget={result.budget:g}, "
+        f"n={config.n_nodes:,}, {result.model_label}, budget={result.budget:g}, "
         f"cost_alpha={result.cost_alpha:g}, n_runs={config.n_runs})\n"
         f"reach winner: {strategies[best_reach]}  |  "
         f"reach-per-cost winner: {strategies[best_rpc]}",

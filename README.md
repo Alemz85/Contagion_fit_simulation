@@ -55,7 +55,13 @@ Outputs land in `results/` (override with `--results DIR`):
 | `F3_distance_heatmap.{svg,png}` | KS-distance matrix (datasets x models), winner starred |
 | `F4_seeding.{svg,png}` | hub vs random seeding reach, with error bars |
 | `F5_flip_boundary.{svg,png}` | hub-advantage surface over the (p, phi) plane |
+| `F8_budget_cost_{ic,threshold}.{svg,png}` | budgeted seeding: reach and reach-per-cost by strategy (random / hub / pagerank / betweenness / greedy) |
 | `summary.json` | all fit results, winners, and experiment outputs |
+
+The budgeted seeding experiment (F8) runs by default; pass
+`--skip-budget-experiment` to omit it on very large substrates where the greedy
+influence-maximisation search is expensive. `--seed-budget` and `--cost-alpha`
+tune the total budget and how steeply seed price rises with degree.
 
 ## Package layout
 
@@ -103,6 +109,12 @@ similar size distributions (equifinality); a finite substrate cannot host the
 largest observed cascades, so comparisons use the distribution *shape* via KS on
 log sizes. Both BA and WS substrates are run to separate robust from fragile
 conclusions.
+
+The original single-seed seeding caveat (a hub seed never loses to one random
+node, so the Watts-Dodds "distributed crowd" claim could not be tested fairly)
+is **now addressed** by the budgeted seeding experiment (F8): seeds are bought
+under a fixed budget with a degree-rising price, so the comparison is
+reach-per-cost. See FINDINGS_en.md §4.4.
 
 ## Tests
 

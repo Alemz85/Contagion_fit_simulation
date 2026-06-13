@@ -52,10 +52,11 @@ def parse_args() -> argparse.Namespace:
     p.add_argument("--seed", type=int, default=20260612)
     p.add_argument("--workers", type=int, default=None)
     p.add_argument("--results", type=Path, default=None)
-    # Phase 4: budgeted seeding experiment (opt-in; adds F8). Off by default so
-    # existing runs are unchanged and the (slower) greedy search is not forced.
-    p.add_argument("--budget-experiment", action="store_true",
-                   help="run the seed-budget / cost experiment and emit F8")
+    # Phase 4: budgeted seeding experiment (emits F8). Runs by default as a
+    # first-class figure; skip it on very large substrates where the greedy
+    # influence-max search is expensive.
+    p.add_argument("--skip-budget-experiment", action="store_true",
+                   help="do not run the seed-budget / cost experiment (no F8)")
     p.add_argument("--seed-budget", type=float, default=None,
                    help="total seeding budget (default: Config.seed_budget)")
     p.add_argument("--cost-alpha", type=float, default=None,
@@ -139,9 +140,9 @@ def main() -> None:
     flip = flip_boundary(config)
     viz.fig_flip_boundary(flip, config)
 
-    # --- seed-budget experiment (F8, opt-in) ---
+    # --- seed-budget experiment (F8); on by default, skippable for heavy runs ---
     budget_results = []
-    if args.budget_experiment:
+    if not args.skip_budget_experiment:
         print(f"[F8] seed-budget experiment (budget={config.seed_budget:g}, "
               f"cost_alpha={config.cost_alpha:g}, strategies={list(config.seed_strategies)})")
         budget_results = [
@@ -169,7 +170,8 @@ def main() -> None:
         "budget_experiment": [br.to_dict() for br in budget_results],
     }
     summary_path.write_text(json.dumps(payload, indent=2), encoding="utf-8")
-    print(f"[done] wrote {summary_path} and figures F1-F5 to {config.results_dir}")
+    figs = "F1-F5" if args.skip_budget_experiment else "F1-F5 + F8"
+    print(f"[done] wrote {summary_path} and figures {figs} to {config.results_dir}")
 
 
 def _config_to_jsonable(config: Config) -> dict:
