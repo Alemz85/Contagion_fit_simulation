@@ -26,7 +26,11 @@ import numpy as np
 from contagion_fit import viz
 from contagion_fit.config import Config
 from contagion_fit.data import load_cascades, summary
-from contagion_fit.experiments import flip_boundary, seeding_experiment
+from contagion_fit.experiments import (
+    flip_boundary,
+    seed_budget_experiment,
+    seeding_experiment,
+)
 from contagion_fit.fit import compare_models
 from contagion_fit.models import ComplexContagion, SimpleContagion
 from contagion_fit.simulate import simulate_parallel
@@ -48,6 +52,14 @@ def parse_args() -> argparse.Namespace:
     p.add_argument("--seed", type=int, default=20260612)
     p.add_argument("--workers", type=int, default=None)
     p.add_argument("--results", type=Path, default=None)
+    # Phase 4: budgeted seeding experiment (opt-in; adds F8). Off by default so
+    # existing runs are unchanged and the (slower) greedy search is not forced.
+    p.add_argument("--budget-experiment", action="store_true",
+                   help="run the seed-budget / cost experiment and emit F8")
+    p.add_argument("--seed-budget", type=float, default=None,
+                   help="total seeding budget (default: Config.seed_budget)")
+    p.add_argument("--cost-alpha", type=float, default=None,
+                   help="how steeply seed cost rises with degree (0 = flat)")
     return p.parse_args()
 
 
@@ -61,6 +73,10 @@ def build_config(args: argparse.Namespace) -> Config:
     )
     if args.results is not None:
         kwargs["results_dir"] = args.results
+    if args.seed_budget is not None:
+        kwargs["seed_budget"] = args.seed_budget
+    if args.cost_alpha is not None:
+        kwargs["cost_alpha"] = args.cost_alpha
     return Config(**kwargs)
 
 
@@ -123,6 +139,23 @@ def main() -> None:
     flip = flip_boundary(config)
     viz.fig_flip_boundary(flip, config)
 
+    # --- seed-budget experiment (F8, opt-in) ---
+    budget_results = []
+    if args.budget_experiment:
+        print(f"[F8] seed-budget experiment (budget={config.seed_budget:g}, "
+              f"cost_alpha={config.cost_alpha:g}, strategies={list(config.seed_strategies)})")
+        budget_results = [
+            seed_budget_experiment(config, SimpleContagion(p=0.05)),
+            seed_budget_experiment(config, ComplexContagion(phi=0.2)),
+        ]
+        for br in budget_results:
+            viz.fig_budget_cost(
+                br, config,
+                name=f"F8_budget_cost_{'ic' if br.model_label.startswith('IC') else 'threshold'}",
+            )
+            print(f"      {br.model_label}: reach winner={br.best_by_reach().strategy}, "
+                  f"reach-per-cost winner={br.best_by_reach_per_cost().strategy}")
+
     # --- persist everything ---
     summary_path = config.results_dir / "summary.json"
     payload = {
@@ -133,6 +166,7 @@ def main() -> None:
         "comparisons": [c.to_dict() for c in comparisons],
         "seeding": [s.to_dict() for s in seeding_results],
         "flip_boundary": flip.to_dict(),
+        "budget_experiment": [br.to_dict() for br in budget_results],
     }
     summary_path.write_text(json.dumps(payload, indent=2), encoding="utf-8")
     print(f"[done] wrote {summary_path} and figures F1-F5 to {config.results_dir}")

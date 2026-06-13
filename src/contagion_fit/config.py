@@ -62,6 +62,20 @@ class Config:
     flip_phi_range: tuple[float, ...] = (0.05, 0.1, 0.2, 0.3, 0.4)
     flip_n_runs: int = 300
 
+    # --- seed-budget experiment (Phase 4: experiments.seed_budget_experiment) ---
+    # A fixed total budget is spent on seeds whose price rises with degree
+    # (cost_alpha). Strategies compete on reach-per-cost, so "many cheap accounts
+    # vs one expensive hub" is a fair fight (the Watts-Dodds test left open by
+    # the single-seed seeding experiment).
+    seed_budget: float = 12.0
+    cost_alpha: float = 1.0
+    seed_strategies: tuple[str, ...] = (
+        "random", "hub", "pagerank", "betweenness", "greedy"
+    )
+    betweenness_k: int | None = 200  # pivot samples for approx betweenness
+    greedy_eval_runs: int = 80       # MC runs per candidate during greedy search
+    greedy_pool: int = 30            # candidate pool size (top-degree nodes)
+
     # --- output ---
     results_dir: Path = field(default=RESULTS_DIR)
 

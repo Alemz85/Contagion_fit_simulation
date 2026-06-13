@@ -114,3 +114,70 @@ def degree_ranked_nodes(graph: nx.Graph) -> np.ndarray:
     nodes = np.asarray([n for n, _ in graph.degree()])
     order = np.argsort(deg)[::-1]
     return nodes[order]
+
+
+# --------------------------------------------------------------------------
+# Seed-budget extension (Phase 4): a cost model and centrality scores.
+#
+# These power the budgeted seeding experiment that asks the Watts-Dodds
+# question fairly: for a *fixed budget*, do many cheap ordinary accounts out-
+# reach one expensive hub? They are pure functions of the graph, so they live
+# here alongside degree_ranked_nodes.
+# --------------------------------------------------------------------------
+
+def degree_array(graph: nx.Graph) -> np.ndarray:
+    """Degrees indexed by node id ``0..n-1`` (nodes are integer-labelled)."""
+    n = graph.number_of_nodes()
+    deg = np.zeros(n, dtype=np.int64)
+    for v, d in graph.degree():
+        deg[v] = d
+    return deg
+
+
+def degree_cost(graph: nx.Graph, alpha: float = 1.0) -> np.ndarray:
+    """Per-node acquisition cost, rising with degree.
+
+    ``cost(v) = 1 + alpha * degree(v) / mean_degree``. One unit is the baseline
+    price of an *average*-degree account; a hub with ten times the mean degree
+    costs about ``1 + 10*alpha`` units. ``alpha = 0`` makes every node cost 1,
+    which reduces a fixed budget to a plain "k seeds" cap (so the same machinery
+    covers both the multiple-seed and the cost-normalised comparisons).
+    """
+    deg = degree_array(graph).astype(np.float64)
+    mean_deg = float(deg.mean()) or 1.0
+    return 1.0 + alpha * deg / mean_deg
+
+
+def centrality_scores(
+    graph: nx.Graph,
+    kind: str,
+    rng: np.random.Generator | None = None,
+    *,
+    k: int | None = None,
+) -> np.ndarray:
+    """Centrality score per node id, used to rank candidate seeds.
+
+    ``kind`` is one of ``"degree"`` / ``"hub"`` (degree), ``"pagerank"`` or
+    ``"betweenness"``. Betweenness on large graphs uses ``k`` pivot samples
+    (seeded from ``rng``) as an approximation; ``k = None`` is exact.
+    """
+    n = graph.number_of_nodes()
+    kind = kind.lower()
+    if kind in ("degree", "hub"):
+        return degree_array(graph).astype(np.float64)
+    if kind == "pagerank":
+        pr = nx.pagerank(graph)
+        scores = np.zeros(n, dtype=np.float64)
+        for v, s in pr.items():
+            scores[v] = s
+        return scores
+    if kind == "betweenness":
+        seed = None if rng is None else int(rng.integers(0, 2**31 - 1))
+        bc = nx.betweenness_centrality(graph, k=k, seed=seed)
+        scores = np.zeros(n, dtype=np.float64)
+        for v, s in bc.items():
+            scores[v] = s
+        return scores
+    raise ValueError(
+        f"unknown centrality {kind!r}; expected degree|hub|pagerank|betweenness"
+    )

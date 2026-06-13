@@ -22,7 +22,11 @@ import numpy as np  # noqa: E402
 
 from contagion_fit.config import Config  # noqa: E402
 from contagion_fit.data import ccdf  # noqa: E402
-from contagion_fit.experiments import FlipBoundaryResult, SeedingResult  # noqa: E402
+from contagion_fit.experiments import (  # noqa: E402
+    BudgetExperimentResult,
+    FlipBoundaryResult,
+    SeedingResult,
+)
 from contagion_fit.fit import ComparisonResult  # noqa: E402
 
 
@@ -199,4 +203,64 @@ def fig_flip_boundary(
                  "(red: hubs win, blue: random wins)")
     fig.colorbar(im, ax=ax, label="hub advantage (nodes)")
     fig.tight_layout()
+    return _save(fig, config.results_dir, name)
+
+
+# --------------------------------------------------------------------------
+# F8 - seed-budget experiment: reach and reach-per-cost by strategy
+# --------------------------------------------------------------------------
+def fig_budget_cost(
+    result: BudgetExperimentResult,
+    config: Config,
+    name: str = "F8_budget_cost",
+) -> list[Path]:
+    """Two-panel comparison of seeding strategies at a fixed budget.
+
+    Left: mean reach (+/- Monte-Carlo SEM), the headline "who reaches most for
+    the same spend". Right: reach-per-cost, the efficiency view that exposes any
+    regime where a distributed crowd of cheap accounts beats one expensive hub.
+    The winning bar in each panel is highlighted.
+    """
+    res = result.results
+    strategies = [r.strategy for r in res]
+    x = np.arange(len(res))
+
+    means = np.array([r.mean_reach for r in res])
+    sems = np.array([r.sem for r in res])
+    rpc = np.array([r.reach_per_cost for r in res])
+    sizes = [r.seed_set_size for r in res]
+
+    best_reach = int(np.argmax(means))
+    best_rpc = int(np.argmax(rpc))
+    base = "tab:gray"
+    win = "tab:green"
+
+    fig, (axl, axr) = plt.subplots(1, 2, figsize=(12, 5))
+
+    bars_l = axl.bar(x, means, yerr=sems, capsize=4,
+                     color=[win if i == best_reach else base for i in range(len(res))])
+    axl.set_xticks(x, strategies, rotation=20, fontsize=9)
+    axl.set_ylabel("expected reach (final cascade size)")
+    axl.set_title("Reach at fixed budget (+/- MC SEM)")
+    axl.grid(True, axis="y", ls=":", alpha=0.4)
+    for i, b in enumerate(bars_l):
+        axl.annotate(f"k={sizes[i]}", (b.get_x() + b.get_width() / 2, b.get_height()),
+                     ha="center", va="bottom", fontsize=8,
+                     xytext=(0, 2), textcoords="offset points")
+
+    bars_r = axr.bar(x, rpc, color=[win if i == best_rpc else base for i in range(len(res))])
+    axr.set_xticks(x, strategies, rotation=20, fontsize=9)
+    axr.set_ylabel("reach per unit cost")
+    axr.set_title("Efficiency: reach / spend")
+    axr.grid(True, axis="y", ls=":", alpha=0.4)
+
+    fig.suptitle(
+        f"F8 - Seed-budget comparison ({config.substrate.upper()} substrate, "
+        f"{result.model_label}, budget={result.budget:g}, "
+        f"cost_alpha={result.cost_alpha:g}, n_runs={config.n_runs})\n"
+        f"reach winner: {strategies[best_reach]}  |  "
+        f"reach-per-cost winner: {strategies[best_rpc]}",
+        fontsize=11,
+    )
+    fig.tight_layout(rect=(0, 0, 1, 0.93))
     return _save(fig, config.results_dir, name)
