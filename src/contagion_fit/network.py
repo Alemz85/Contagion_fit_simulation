@@ -47,7 +47,7 @@ def build_network(config: Config, rng: np.random.Generator | None = None) -> nx.
 
 def _seed_int(rng: np.random.Generator) -> int:
     """networkx generators want an int seed; derive one from the injected rng."""
-    return int(rng.integers(0, 2**31 - 1))
+    return int(rng.integers(0, 2**31))
 
 
 def _barabasi_albert(config: Config, rng: np.random.Generator) -> nx.Graph:
@@ -172,7 +172,7 @@ def centrality_scores(
             scores[v] = s
         return scores
     if kind == "betweenness":
-        seed = None if rng is None else int(rng.integers(0, 2**31 - 1))
+        seed = None if rng is None else int(rng.integers(0, 2**31))
         bc = nx.betweenness_centrality(graph, k=k, seed=seed)
         scores = np.zeros(n, dtype=np.float64)
         for v, s in bc.items():
