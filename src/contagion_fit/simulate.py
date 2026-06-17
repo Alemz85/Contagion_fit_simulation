@@ -131,6 +131,7 @@ _WORKER: dict[str, object] = {}
 
 
 def _init_worker(config: Config) -> None:
+    _WORKER.clear()  # clear stale keys from any previous initialisation
     graph = build_network(config)
     _as_csr(graph)
     _WORKER["graph"] = graph
@@ -213,6 +214,7 @@ def reach_fixed_seeds_on_graph(
 
 
 def _init_budget_worker(config: Config, cost_alpha: float) -> None:
+    _WORKER.clear()  # clear stale keys from any previous initialisation
     graph = build_network(config)
     _as_csr(graph)
     _WORKER["graph"] = graph
