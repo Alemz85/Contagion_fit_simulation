@@ -148,6 +148,7 @@ class ComplexContagion:
         # A node with phi > 0 but degree 0 can never reach threshold; with
         # phi == 0 every node (need == 0) activates immediately.
         need = np.maximum(need, 1) if self.phi > 0 else np.zeros(n, dtype=np.int64)
+        need[degree == 0] = 1  # isolated nodes cannot receive contagion regardless of phi
 
         while True:
             # Count active neighbours for every node via CSR scatter-add.
