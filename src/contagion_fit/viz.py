@@ -151,14 +151,14 @@ def fig_seeding(
     config: Config,
     name: str = "F4_seeding",
 ) -> list[Path]:
-    """Grouped bar chart of mean reach (+/- std) for hub vs random seeding."""
+    """Grouped bar chart of mean reach (+/- SEM) for hub vs random seeding."""
     fig, ax = plt.subplots(figsize=(7, 5))
     x = np.arange(len(results))
     width = 0.38
     hub_means = [r.hub.mean() for r in results]
-    hub_err = [r.hub.std() for r in results]
+    hub_err = [r.hub.std() / np.sqrt(len(r.hub)) for r in results]
     rnd_means = [r.random.mean() for r in results]
-    rnd_err = [r.random.std() for r in results]
+    rnd_err = [r.random.std() / np.sqrt(len(r.random)) for r in results]
     ax.bar(x - width / 2, hub_means, width, yerr=hub_err, capsize=4,
            label="hub seed", color="tab:orange")
     ax.bar(x + width / 2, rnd_means, width, yerr=rnd_err, capsize=4,
