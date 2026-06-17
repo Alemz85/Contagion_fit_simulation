@@ -16,6 +16,7 @@ people, reached just as well by random seeding).
 
 from __future__ import annotations
 
+import hashlib
 from dataclasses import dataclass
 from typing import Sequence
 
@@ -153,6 +154,21 @@ def flip_boundary(
 # another component's substream.
 _BUDGET_STREAM_BASE = 90_000_000
 _GREEDY_STREAM_BASE = 80_000_000
+
+
+def _greedy_stream_offset(model_label: str) -> int:
+    """Per-model greedy substream, deterministic across runs and processes.
+
+    The greedy search evaluates marginal reach with the simulator, so it
+    consumes random draws. If every model started from the same offset, two
+    models' searches would share an identical substream and could discover the
+    same seed set by coincidence. We shift the base by a stable hash of the
+    model label (``hash()`` is salted per interpreter, so it cannot be used).
+    The spread stays well below ``_BUDGET_STREAM_BASE`` and the search itself
+    consumes only tens of thousands of draws, so substreams never collide.
+    """
+    digest = hashlib.sha256(model_label.encode("utf-8")).digest()
+    return _GREEDY_STREAM_BASE + int.from_bytes(digest[:4], "big") % 4_000_000
 
 
 @dataclass(frozen=True)
@@ -329,7 +345,7 @@ def seed_budget_experiment(
         elif strat == "greedy":
             seeds, _trace = greedy_influence_max(
                 config, model, graph, cost, budget=budget,
-                stream_offset=_GREEDY_STREAM_BASE,
+                stream_offset=_greedy_stream_offset(model.label),
             )
             reach = reach_fixed_seeds(
                 config, model, seeds, n_runs=n_runs, stream_offset=stream
