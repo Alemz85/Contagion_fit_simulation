@@ -21,8 +21,9 @@ Two entry points are provided:
 from __future__ import annotations
 
 import os
-from concurrent.futures import ProcessPoolExecutor
-from typing import Literal
+from concurrent.futures import Executor, ProcessPoolExecutor
+from contextlib import contextmanager
+from typing import Iterator, Literal
 
 import networkx as nx
 import numpy as np
@@ -101,6 +102,42 @@ def _run_one(task: tuple[ContagionModel, SeedStrategy, int, int]) -> int:
     return len(model.run(graph, seeds, rng))
 
 
+# Sentinel so that ``executor=None`` can mean "run serially" while the default
+# (no executor passed) means "open a one-off pool for this call".
+_UNSET = object()
+
+
+@contextmanager
+def simulation_pool(config: Config) -> Iterator[Executor | None]:
+    """Open one reusable worker pool whose graph is built **once** per worker.
+
+    The substrate is fixed by ``config``, so every grid-search cell shares the
+    same graph. Building it once here (instead of once *per cell*) is what makes
+    a grid search of hundreds of cells fast: without it, each ``simulate_parallel``
+    call would respawn the whole pool and rebuild the n-node graph in every
+    worker. Yields ``None`` in single-worker mode (serial), having warmed the
+    in-process graph cache.
+    """
+    n_workers = config.n_workers or os.cpu_count() or 1
+    if n_workers == 1:
+        _init_worker(config)
+        yield None
+    else:
+        with ProcessPoolExecutor(
+            max_workers=n_workers, initializer=_init_worker, initargs=(config,)
+        ) as pool:
+            yield pool
+
+
+def _map_tasks(executor: Executor | None, tasks: list, n_runs: int,
+               n_workers: int) -> np.ndarray:
+    if executor is None:  # serial; _init_worker already warmed _WORKER
+        return np.asarray([_run_one(t) for t in tasks], dtype=np.int64)
+    chunk = max(1, n_runs // (n_workers * 4))
+    return np.asarray(list(executor.map(_run_one, tasks, chunksize=chunk)),
+                      dtype=np.int64)
+
+
 def simulate_parallel(
     config: Config,
     model: ContagionModel,
@@ -109,28 +146,27 @@ def simulate_parallel(
     seed_count: int | None = None,
     *,
     stream_offset: int = 0,
+    executor: Executor | None | object = _UNSET,
 ) -> np.ndarray:
     """Parallel Monte-Carlo driven by ``config``.
 
     ``stream_offset`` shifts the per-run substreams so that several calls (e.g.
     grid-search cells) draw non-overlapping randomness while staying fully
     reproducible.
+
+    ``executor`` lets a caller (e.g. ``fit.grid_search``) reuse a single pool
+    across many calls via :func:`simulation_pool`, so the graph is built once
+    rather than once per call. When omitted, a one-off pool is opened for this
+    call (backward-compatible behaviour).
     """
     n_runs = config.n_runs if n_runs is None else n_runs
     seed_count = config.seed_count if seed_count is None else seed_count
     n_workers = config.n_workers or os.cpu_count() or 1
 
-    seeds_per_run = [
-        config.child_seed(stream_offset + i) for i in range(n_runs)
-    ]
+    seeds_per_run = [config.child_seed(stream_offset + i) for i in range(n_runs)]
     tasks = [(model, seed_strategy, seed_count, s) for s in seeds_per_run]
 
-    if n_workers == 1:
-        _init_worker(config)
-        return np.asarray([_run_one(t) for t in tasks], dtype=np.int64)
-
-    with ProcessPoolExecutor(
-        max_workers=n_workers, initializer=_init_worker, initargs=(config,)
-    ) as pool:
-        sizes = list(pool.map(_run_one, tasks, chunksize=max(1, n_runs // (n_workers * 4))))
-    return np.asarray(sizes, dtype=np.int64)
+    if executor is _UNSET:
+        with simulation_pool(config) as ex:
+            return _map_tasks(ex, tasks, n_runs, n_workers)
+    return _map_tasks(executor, tasks, n_runs, n_workers)
