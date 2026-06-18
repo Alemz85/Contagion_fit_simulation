@@ -55,7 +55,7 @@ class Config:
         0.001, 0.003, 0.01, 0.03, 0.05, 0.1, 0.15, 0.2, 0.3, 0.5, 0.7
     )
     threshold_phi_grid: tuple[float, ...] = (0.05, 0.1, 0.15, 0.2, 0.3, 0.4)
-    threshold_p_grid: tuple[float, ...] = (0.5, 1.0)
+    threshold_p_grid: tuple[float, ...] = (0.1, 0.2, 0.3, 0.5, 0.7, 1.0)
 
     # --- flip-boundary sweep (experiments.py) ---
     flip_p_range: tuple[float, ...] = (0.01, 0.03, 0.05, 0.1, 0.2)
