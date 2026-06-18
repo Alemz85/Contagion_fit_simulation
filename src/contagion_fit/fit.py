@@ -23,7 +23,7 @@ from scipy.stats import ks_2samp
 
 from contagion_fit.config import Config
 from contagion_fit.models import ComplexContagion, SimpleContagion
-from contagion_fit.simulate import simulate_parallel
+from contagion_fit.simulate import simulate_parallel, simulation_pool
 
 # Distances below this are treated as indistinguishable -> reported as a tie.
 TIE_MARGIN = 0.02
@@ -91,20 +91,25 @@ def grid_search(
     combos = _param_combinations(param_grid)
     table: list[GridCell] = []
     best: GridCell | None = None
-    for idx, params in enumerate(combos):
-        model = model_cls(**params)
-        simulated = simulate_parallel(
-            config,
-            model,
-            n_runs=n_runs,
-            seed_strategy=seed_strategy,
-            stream_offset=idx * n_runs,
-        )
-        dist = ks_distance(observed, simulated)
-        cell = GridCell(params=params, distance=dist)
-        table.append(cell)
-        if best is None or dist < best.distance:
-            best = cell
+    # Open one worker pool for the whole search: the substrate graph is built
+    # once per worker and reused across every cell (instead of respawning the
+    # pool and rebuilding the graph for each parameter combination).
+    with simulation_pool(config) as executor:
+        for idx, params in enumerate(combos):
+            model = model_cls(**params)
+            simulated = simulate_parallel(
+                config,
+                model,
+                n_runs=n_runs,
+                seed_strategy=seed_strategy,
+                stream_offset=idx * n_runs,
+                executor=executor,
+            )
+            dist = ks_distance(observed, simulated)
+            cell = GridCell(params=params, distance=dist)
+            table.append(cell)
+            if best is None or dist < best.distance:
+                best = cell
     assert best is not None  # param_grid is never empty in practice
     return FitResult(
         model_name=model_cls.__name__,
